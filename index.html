@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="./img/the_game.png" rel="shortcut icon"/>
+        <meta charset="utf-8"/>
+        <meta content="width=1024, maximum-scale=1.0" name="viewport"/>
+        <link href="./css/desktop.css" rel="stylesheet" type="text/css"/>
+        <meta content="Launchpad by Anima" name="author">
+        <title>The Game</title>
+        </meta>
+    </head>
+    <body style="margin: 10;
+ background: rgba(255, 255, 255, 1.0);">
+        <input id="anPageName" name="page" type="hidden" value="desktop"/>
+        <div class="desktop">
+            <div style="width: 1024px; height: 100%; position:relative; margin:auto; ">
+                <div class="rectangle">
+                                    <div class="overallscore"  >
+                    Overall Score 
+                </div> 
+                    
+                </div>
+
+
+                <div class="rectangle1">
+                   
+                    <span id="overallscore0"></span>
+                </div>
+
+                <div class="rectangle2">
+                     <span id="overallscore1"></span>
+                </div>
+                
+                <div class="rectangle3">
+                </div>
+                <div class="newgame">
+                 <button type="submit" id="main_button">   New Game</button>
+                </div>
+                <div class="player1" id ="p1">
+                    Player 1
+                </div>
+                <div  class="targetscore">
+                    Target Score: <span id="target"></span>
+                    
+                </div>
+                
+                <span style = "position: relative;
+                top: 372px;
+                left: -143px;
+                font-family: monospace;
+                font-size: large;"
+                
+                ><br>Goal: Reach target score <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspwithout rolling a 1</span>
+                <div class="currentscore">
+                    Current Score:  &nbsp <span id="current_score0"></span>
+                </div>
+                <div class="currentscore1">
+                    Current Score: &nbsp <span id="current_score1"></span>
+                </div>
+                <div class="overallscore1">
+                    Overall Score
+                    
+                </div>
+                <div class="player2" id='p2'>
+                    Player 2
+                </div>
+                <div class="hold">
+                   <button id="hold_btn"> Hold </button>
+                </div>
+                <div class="roll"><button id="btn">
+                    Roll</button>
+                </div>
+                <img anima-src="./img/desktop-oval@2x.png" class="oval" id=o0 src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
+                <img anima-src="./img/desktop-oval-1@2x.png" class="oval1" id =o1 src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="/>
+                <img id ="dice-1" src="./img/img_1.png" class="image1" />
+            </div>
+        </div>
+        <!-- Scripts -->
+        <script src="app.js"></script>
+        <script>
+            anima_isHidden = function(e) {
+                if (!(e instanceof HTMLElement)) return !1;
+                if (getComputedStyle(e).display == "none") return !0; else if (e.parentNode && anima_isHidden(e.parentNode)) return !0;
+                return !1;
+            };
+            anima_loadAsyncSrcForTag = function(tag) {
+                var elements = document.getElementsByTagName(tag);
+                var toLoad = [];
+                for (var i = 0; i < elements.length; i++) {
+                    var e = elements[i];
+                    var src = e.getAttribute("src");
+                    var loaded = (src != undefined && src.length > 0 && src != 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+                    if (loaded) continue;
+                    var asyncSrc = e.getAttribute("anima-src");
+                    if (asyncSrc == undefined || asyncSrc.length == 0) continue;
+                    if (anima_isHidden(e)) continue;
+                    toLoad.push(e);
+                }
+                toLoad.sort(function(a, b) {
+                    return anima_getTop(a) - anima_getTop(b);
+                });
+                for (var i = 0; i < toLoad.length; i++) {
+                    var e = toLoad[i];
+                    var asyncSrc = e.getAttribute("anima-src");
+                    e.setAttribute("src", asyncSrc);
+                }
+            };
+            anima_pauseHiddenVideos = function(tag) {
+                var elements = document.getElementsByTagName("video");
+                for (var i = 0; i < elements.length; i++) {
+                    var e = elements[i];
+                    var isPlaying = !!(e.currentTime > 0 && !e.paused && !e.ended && e.readyState > 2);
+                    var isHidden = anima_isHidden(e);
+                    if (!isPlaying && !isHidden && e.getAttribute("autoplay") == "autoplay") {
+                        e.play();
+                    } else if (isPlaying && isHidden) {
+                        e.pause();
+                    }
+                }
+            };
+            anima_loadAsyncSrc = function(tag) {
+                anima_loadAsyncSrcForTag("img");
+                anima_loadAsyncSrcForTag("iframe");
+                anima_loadAsyncSrcForTag("video");
+                anima_pauseHiddenVideos();
+            };
+            var anima_getTop = function(e) {
+                var top = 0;
+                do {
+                    top += e.offsetTop || 0;
+                    e = e.offsetParent;
+                } while (e);
+                return top;
+            };
+            anima_loadAsyncSrc();
+            anima_old_onResize = window.onresize;
+            anima_new_onResize = undefined;
+            anima_updateOnResize = function() {
+                if (anima_new_onResize == undefined || window.onresize != anima_new_onResize) {
+                    anima_new_onResize = function(x) {
+                        if (anima_old_onResize != undefined) anima_old_onResize(x);
+                        anima_loadAsyncSrc();
+                    };
+                    window.onresize = anima_new_onResize;
+                    setTimeout(function() {
+                        anima_updateOnResize();
+                    }, 3000);
+                }
+            };
+            anima_updateOnResize();
+            setTimeout(function() {
+                anima_loadAsyncSrc();
+            }, 200);
+        </script>
+        <!-- End of Scripts -->
+    </body>
+</html>
